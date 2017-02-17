@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:id="@+id/ivPoster"
+        android:id="@+id/ivBackdrop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -12,17 +12,17 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ivPoster"
-        android:layout_toRightOf="@+id/ivPoster"
+        android:layout_alignTop="@+id/ivBackdrop"
+        android:layout_toRightOf="@+id/ivBackdrop"
         android:textColor="#FFFFFF"
         android:textSize="18sp"/>
     <TextView
         android:id="@+id/tvOverview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/ivPoster"
+        android:layout_toRightOf="@+id/ivBackdrop"
         android:layout_below="@+id/tvTitle"
-        android:layout_alignBottom="@+id/ivPoster"
+        android:layout_alignBottom="@+id/ivBackdrop"
         android:textSize="12sp"/>
 
 </RelativeLayout>

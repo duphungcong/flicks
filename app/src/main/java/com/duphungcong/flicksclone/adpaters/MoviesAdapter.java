@@ -1,6 +1,7 @@
 package com.duphungcong.flicksclone.adpaters;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,22 +21,23 @@ import java.util.List;
  */
 
 public class MoviesAdapter extends ArrayAdapter<Movie> {
+    private List<Movie> movies;
     // View lockup cache
     private static class ViewHolder {
-        TextView tvMovieTitle;
-        ImageView ivPosterImage;
+        TextView tvTitle;
+        TextView tvOverview;
+        ImageView ivPoster;
+        ImageView ivBackdrop;
     }
 
     public MoviesAdapter(Context context, List<Movie> objects) {
         super(context, R.layout.movie_in_list, objects);
+        movies = objects;
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get data item for this position
-        Movie movie = getItem(position);
-
         // Check if an existing view is being reused, otherwise inflate new view for row
         ViewHolder viewHolder;
         if(convertView == null) {
@@ -43,23 +45,47 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_in_list, parent, false);
-            viewHolder.tvMovieTitle = (TextView) convertView.findViewById(R.id.tvMovieTitle);
-            viewHolder.ivPosterImage = (ImageView) convertView.findViewById(R.id.ivPosterImage);
+
+            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+            viewHolder.tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
+            viewHolder.ivPoster = (ImageView) convertView.findViewById(R.id.ivPoster);
+            viewHolder.ivBackdrop = (ImageView) convertView.findViewById(R.id.ivBackdrop);
+
             // Cache the viewHolder object inside the fresh view
             convertView.setTag(viewHolder);
+
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.tvMovieTitle.setText(movie.getTitle());
-        String imageUrl = "http://image.tmdb.org/t/p/w500" + movie.getPosterPath();
-        Picasso.with(getContext())
-                .load(imageUrl)
-                .resize(500, 500)
-                .centerCrop()
-                .error(R.drawable.deadpool_poster)
-                .into(viewHolder.ivPosterImage);
+        bindViewHolder(position, viewHolder);
 
         return convertView;
+    }
+
+    private void bindViewHolder(int position, ViewHolder viewHolder) {
+        Movie movie = movies.get(position);
+
+        viewHolder.tvTitle.setText(movie.getTitle());
+        viewHolder.tvOverview.setText(movie.getOverview());
+
+        int orientation = getContext().getResources().getConfiguration().orientation;
+        if(orientation == Configuration.ORIENTATION_PORTRAIT) {
+            loadImage(viewHolder.ivPoster, movie.getPosterPath(), 300, 500);
+        } else {
+            loadImage(viewHolder.ivBackdrop, movie.getBackdropPath(), 500, 300);
+        }
+
+    }
+
+    private void loadImage(ImageView imageView, String path, int imageWidth, int imageHeight) {
+        String imageUrl = "http://image.tmdb.org/t/p/w500" + path;
+
+        Picasso.with(getContext())
+                .load(imageUrl)
+                .resize(imageWidth, imageHeight)
+                .centerCrop()
+                .error(R.drawable.deadpool_poster)
+                .into(imageView);
     }
 }
