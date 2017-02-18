@@ -21,6 +21,9 @@ public class Movie {
 
     private String overview;
 
+    @SerializedName("vote_average")
+    private double voteAverage;
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -33,4 +36,6 @@ public class Movie {
     public String getBackdropPath() { return this.backdropPath; }
 
     public String getOverview() { return this.overview; }
+
+    public double getVoteAverage() { return this.voteAverage; }
 }
