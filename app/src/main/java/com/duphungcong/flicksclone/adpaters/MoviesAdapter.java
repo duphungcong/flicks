@@ -83,9 +83,10 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
 
         Picasso.with(getContext())
                 .load(imageUrl)
-                .resize(imageWidth, imageHeight)
+                .fit()
                 .centerCrop()
-                .error(R.drawable.deadpool_poster)
+                .placeholder(R.drawable.image_loading)
+                .error(R.drawable.image_loading)
                 .into(imageView);
     }
 }
