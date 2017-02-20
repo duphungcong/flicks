@@ -14,5 +14,5 @@ public interface ApiEndpointInterface {
     // Request method and URL specified in the annotation
     // Callback for the parsed response is the last parameter
     @GET("movie/now_playing")
-    Call<MoviesResponse> getNowPayingMovies(@Query("api_key") String apiKey);
+    Call<MoviesResponse> getNowPayingMovies(@Query("api_key") String apiKey, @Query("page") int page);
 }

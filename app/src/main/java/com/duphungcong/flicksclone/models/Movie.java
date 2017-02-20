@@ -2,11 +2,13 @@ package com.duphungcong.flicksclone.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by udcun on 2/15/2017.
  */
 
-public class Movie {
+public class Movie implements Serializable {
     public Movie() {
         this.title = "movie title";
     }
@@ -22,11 +24,11 @@ public class Movie {
     private String overview;
 
     @SerializedName("vote_average")
-    private double voteAverage;
+    private float voteAverage;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @SerializedName("release_date")
+    private String releaseDate;
+
     public String getTitle() {
         return this.title;
     }
@@ -37,5 +39,7 @@ public class Movie {
 
     public String getOverview() { return this.overview; }
 
-    public double getVoteAverage() { return this.voteAverage; }
+    public float getVoteAverage() { return this.voteAverage; }
+
+    public String getReleaseDate() { return this.releaseDate; }
 }

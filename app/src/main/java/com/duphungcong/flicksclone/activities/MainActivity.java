@@ -1,9 +1,13 @@
 package com.duphungcong.flicksclone.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -30,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private String API_KEY = "8870acc15c4c34351838d4c68793a8d1";
+    private int page;
+    private int totalPages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +45,26 @@ public class MainActivity extends AppCompatActivity {
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         moviesList = (ListView) findViewById(R.id.lvMoviesList);
         movies = new ArrayList<>();
+        page = 1;
 
+        // Support swipe to refresh the view
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 moviesAdapter.clear();
-                getNowPlayingMovies();
+                getNowPlayingMovies(page);
                 swipeContainer.setRefreshing(false);
             }
         });
 
-        getNowPlayingMovies();
+        // Get now playing movies from themoviedb.org and fill into List View
+        getNowPlayingMovies(page);
+
+        // Listen evens on list view
+        setupLisViewListener();
     }
 
-    public void getNowPlayingMovies() {
+    public void getNowPlayingMovies(int page) {
         if(API_KEY.isEmpty()) {
             Toast.makeText(this, "No API KEY", Toast.LENGTH_LONG).show();
             return;
@@ -60,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         ApiEndpointInterface apiService = ApiClient.getClient().create(ApiEndpointInterface.class);
 
-        Call<MoviesResponse> call = apiService.getNowPayingMovies(API_KEY);
+        Call<MoviesResponse> call = apiService.getNowPayingMovies(API_KEY, page);
         call.enqueue(new Callback<MoviesResponse>() {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
@@ -75,6 +87,31 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+    private void setupLisViewListener() {
+        moviesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
+
+                intent.putExtra("movie", moviesAdapter.getItem(position));
+
+                startActivity(intent);
+            }
+        });
+
+        moviesList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
             }
         });
     }

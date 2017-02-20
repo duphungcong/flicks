@@ -38,15 +38,22 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     }
 
     private static class ViewHolderForPopularMovie {
-        ImageView ivBackdrop;
+        TextView tvTitle, tvReleaseDate, tvGenre, tvVoteAverage;
+        ImageView ivBackdrop, ivVoteStart;
 
         public ViewHolderForPopularMovie(View view) {
+            this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+            this.tvReleaseDate = (TextView) view.findViewById(R.id.tvReleaseDate);
+            this.tvGenre = (TextView) view.findViewById(R.id.tvGenre);
+            this.tvVoteAverage = (TextView) view.findViewById(R.id.tvVoteAverage);
+
             this.ivBackdrop = (ImageView) view.findViewById(R.id.ivBackdrop);
+            this.ivVoteStart = (ImageView) view.findViewById(R.id.ivVoteStart);
         }
     }
 
     public MoviesAdapter(Context context, List<Movie> objects) {
-        super(context, R.layout.normal_movie_in_list, objects);
+        super(context, R.layout.normal_movie, objects);
         movies = objects;
     }
 
@@ -128,6 +135,19 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
 
     public void bindViewHolderForPopularMovie(int position, ViewHolderForPopularMovie viewHolder) {
         Movie movie = movies.get(position);
+
+        if(viewHolder.tvTitle != null) {
+            viewHolder.tvTitle.setText(movie.getTitle());
+        }
+
+        if(viewHolder.tvVoteAverage != null) {
+            viewHolder.tvVoteAverage.setText(Float.toString(movie.getVoteAverage()));
+        }
+
+        if(viewHolder.tvReleaseDate != null) {
+            viewHolder.tvReleaseDate.setText(movie.getReleaseDate());
+        }
+
         loadImage(viewHolder.ivBackdrop, movie.getBackdropPath());
     }
 
@@ -170,9 +190,9 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     public View getInflatedLayoutForType(int type) {
         switch (type) {
             case 0:
-                return LayoutInflater.from(getContext()).inflate(R.layout.normal_movie_in_list, null);
+                return LayoutInflater.from(getContext()).inflate(R.layout.normal_movie, null);
             case 1:
-                return LayoutInflater.from(getContext()).inflate(R.layout.popular_movie_in_list, null);
+                return LayoutInflater.from(getContext()).inflate(R.layout.popular_movie, null);
             default:
                 return null;
         }
