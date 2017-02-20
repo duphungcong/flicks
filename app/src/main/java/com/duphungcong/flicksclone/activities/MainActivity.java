@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private String API_KEY = "8870acc15c4c34351838d4c68793a8d1";
-    private int page;
+    private int currentPage = 1;
+    private int previousPage = 0;
     private int totalPages;
 
     @Override
@@ -45,20 +46,19 @@ public class MainActivity extends AppCompatActivity {
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         moviesList = (ListView) findViewById(R.id.lvMoviesList);
         movies = new ArrayList<>();
-        page = 1;
 
         // Support swipe to refresh the view
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 moviesAdapter.clear();
-                getNowPlayingMovies(page);
+                getNowPlayingMovies(currentPage);
                 swipeContainer.setRefreshing(false);
             }
         });
 
         // Get now playing movies from themoviedb.org and fill into List View
-        getNowPlayingMovies(page);
+        getNowPlayingMovies(currentPage);
 
         // Listen evens on list view
         setupLisViewListener();
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movies = response.body().getResults();
+                totalPages = response.body().getTotalPages();
                 Log.d(TAG, "request now playing movies");
 
                 moviesAdapter = new MoviesAdapter(getApplicationContext(), movies);
