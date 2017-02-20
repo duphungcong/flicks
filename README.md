@@ -49,12 +49,12 @@ Describe any challenges encountered while building the app.
 
 ## Open-source libraries used
 
-- [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
+- [Retrofit](https://github.com/square/retrofit) - Type-safe HTTP client for Android and Java by Square
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2017] [duphungcong]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
